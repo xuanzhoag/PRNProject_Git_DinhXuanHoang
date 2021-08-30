@@ -1,0 +1,47 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    text-align: left;
+}
+
+#second span{
+    font-size: 70%;
+    border: 0px solid green;
+  background-color: green;
+    border-radius: 15px;
+    color: white;
+    padding: 5px;
+    font-size: 60%;
+  
+}
+#fourth span{
+  
+   border: 2px solid green ;
+    border-radius: 15px;
+    color: black;
+  margin: 0px 3px;
+}
+
+img{
+ height: 50%;
+ width: 50%;
+ margin-top: -18%;
+margin-right: -30%;
+}
+
+th{
+   
+    background-color:#6b90da;
+    
+}
+table, th, td{
+  border:1px;
+  text-align: center;
+  border-right-style: white;
+}
+table{
+  border-collapse:collapse;
+}
+
+
+

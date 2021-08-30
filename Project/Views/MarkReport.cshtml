@@ -1,0 +1,240 @@
+﻿@using Project.Controllers;
+@using Project.Models;
+@model List<Mark>;
+
+
+@{
+    List<Mark> assignments = new List<Mark>();
+    List<Mark> pe = new List<Mark>();
+    List<Mark> labs = new List<Mark>();
+    List<Mark> fe = new List<Mark>();
+    List<Mark> pt = new List<Mark>();
+    List<Mark> prj = new List<Mark>();
+    List<Mark> ex = new List<Mark>();
+
+    int count = 0, index = 1;
+    double total = 0;
+    double average = 0;
+    double totalWeight = 0;
+    double finalMark = 0;
+    double FE = 0;
+
+    Object CreateTable(List<Mark> list)
+    {
+        @if (list.Count != 0)
+        {
+            count = list.Count + 1;
+            @foreach (Mark items in list)
+            {
+                @if (items.MarkType == "Final Exam")
+                {
+                    FE = items.Value;
+                }
+                total += items.Value;
+                <tr>
+                    @if (index <= 1)
+                    {
+                        <td rowspan="@count"
+                            style="vertical-align : middle;text-align:center;background-color:white">
+                            @items.MarkType
+                        </td>
+                    }
+                    <td>@items.MarkName</td>
+                    <td>@items.MarkWeight%</td>
+                    <td>@items.Value</td>
+                    <td></td>
+                </tr>
+                index++;
+                totalWeight += Convert.ToDouble(items.MarkWeight);
+            }
+            average = total / list.Count;
+            <tr>
+                <td>Total:</td>
+                <td>@Math.Round(totalWeight)%</td>
+                <td>@Math.Round(average, 2)</td>
+                <td></td>
+            </tr>
+            finalMark += average * totalWeight / 100;
+            total = 0;
+            index = 1;
+            totalWeight = 0;
+            average = 0;
+            count = 0;
+        }
+        return null;
+    }
+}
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="/css/common2.css">
+
+    <script src='main.js'></script>
+</head>
+
+
+
+
+
+<body>
+    <div class="container">
+        <div class="container">
+            <div class="row pt-3" style="">
+                <div class="col-md-9">
+                    <h1 style="">FPT University Academic Portal</h1>
+                </div>
+            </div>
+            <div class="col-md-3" style="float: right; display: inline-flex; margin-right: 2%;">
+                <img src="/css/imagez/appstore.png" />
+            </div>
+
+        </div>
+        <div class="container col-md-10" style="background-color: #f5f5f5; margin-top: 15px; padding: 9px 0px; margin-left: 15PX; font-size: 70%;">
+            <span style="margin-left: 1%;"> @Html.ActionLink("Home", "Index", "Home")</span>
+            <span style="font-weight: bold;">
+                | Grade Transcript
+            </span>
+            <div class="row" id="second" style=" float: inline-end  ;display: inline-flex; margin-left: 65%; margin-top: 0%;">
+                <span> @ViewBag.studentID </span>|
+                <span>logout</span>|
+                <span>CAMPUS: FPTU-HÒA LẠC</span>
+            </div>
+        </div>
+        <div class="container" id="third" style="">
+
+            <div class="row pt-4" style="margin: 30px 0px;padding-left: 1%;">
+                <h1 style="font-weight: normal;font-size: 150%;margin-top: 1%;">
+                    Grade report for @ViewBag.studentName  - ( @ViewBag.studentID )
+                </h1>
+
+
+
+            </div>
+
+
+
+        </div>
+
+        <div class="container col-md-10" style="margin-left: 0%;">
+            <table style="width: 48%; font-weight: normal;">
+                <tr style="font-weight: normal; background-color: #6b90da; " id="mr2">
+
+                    <th style=" text-align: center;">TERM</th>
+                    <th style=" text-align: center;">Course</th>
+
+
+                </tr>
+                <tr style="text-align:center">
+                    <td>
+                        @using (Html.BeginForm("MarkReport", "Home", FormMethod.Post))
+                        {
+                            @Html.DropDownList("termID", null, new { onchange = "form.submit();" });
+                        }
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("MarkReport", "Home", FormMethod.Post))
+                        {
+                            @Html.DropDownList("CourseID", null, new { onchange = "form.submit();" });
+                        }
+                    </td>
+                <tr>
+
+            </table>
+
+        </div>
+        @{
+            <div class="row pt-4" style="float: right;width: 60%; margin-top: -7%;">
+                <table border="1" style="width: 70%; font-weight: normal; ">
+                    <thead>
+                        <tr>
+                            <th>Grade Category</th>
+                            <th>Grade Type</th>
+                            <th>Percentage</th>
+                            <th>Value</th>
+                            <th>Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color:white;">
+                        @foreach (var items in Model)
+                        {
+                            if (items.MarkType.Trim() == "Assignment")
+                                assignments.Add(items);
+                            if (items.MarkType.Trim() == "Lab")
+                                labs.Add(items);
+                            if (items.MarkType.Trim() == "Practical Exam")
+                                pe.Add(items);
+                            if (items.MarkType.Trim() == "Final Exam")
+                                fe.Add(items);
+
+                            if (items.MarkType.Trim() == "Progress Test")
+                                pt.Add(items);
+                            if (items.MarkType.Trim() == "Project")
+                                prj.Add(items);
+
+                            if (items.MarkType.Trim() == "Exercise")
+                                ex.Add(items);
+                        }
+                        @CreateTable(assignments)
+                        @CreateTable(pt)
+                        @CreateTable(labs)
+
+                        @CreateTable(ex)
+                        @CreateTable(prj)
+                        @CreateTable(pe)
+                        @CreateTable(fe)
+
+
+                    </tbody>
+
+                    <tfoot style="background-color:white">
+                        <tr>
+                            <td rowspan="2" style="vertical-align: middle; text-align: center; background-color: white;">COURSE TOTAL</td>
+                            <td style="background-color:white">AVERAGE</td>
+                            <td colspan="3" style="background-color:white">@Math.Round(finalMark, 1)</td>
+                        </tr>
+                        <tr>
+                            <td>STATUS</td>
+                            <td colspan="3">
+
+                                @if (finalMark < 5)
+                                {
+                                    <b style="color:red;">NOT PASSED</b>
+                                }
+                                else if (finalMark > 5)
+                                {
+                                    if (FE < 4)
+                                    {
+
+
+                                        <b style="color:red;">NOT PASSED</b>
+                                    }
+                                    else
+                                    {
+                                        <b style="color:green">PASSED</b>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+                <footer>
+                </footer>
+            </div>
+        }
+    </div>
+</body>
+
+</html>
